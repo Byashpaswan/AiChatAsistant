@@ -1,0 +1,164 @@
+<main class="chat-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">N</span>
+      <div>
+        <h1>Nexus AI</h1>
+        <p>Gemini powered workspace</p>
+      </div>
+    </div>
+
+    <button class="btn btn-primary new-chat" type="button" (click)="startNewChat()">
+      <span>+</span>
+      New chat
+    </button>
+
+    <div class="sidebar-stats">
+      <div>
+        <strong>{{ chats().length }}</strong>
+        <span>Chats</span>
+      </div>
+      <div>
+        <strong>{{ totalMessages() }}</strong>
+        <span>Messages</span>
+      </div>
+    </div>
+
+    <div class="history-label">
+      <span>Conversations</span>
+      <button type="button" title="Refresh" (click)="loadChats()">Refresh</button>
+    </div>
+
+    <div class="history" *ngIf="chats().length; else emptyHistory">
+      <button
+        class="chat-link"
+        type="button"
+        *ngFor="let chat of chats(); trackBy: trackById"
+        [class.active]="chat._id === activeChatId()"
+        (click)="openChat(chat._id)"
+      >
+        <span>
+          <strong>{{ chat.title }}</strong>
+          <small>{{ chat.lastMessage || "No messages yet" }}</small>
+        </span>
+        <span class="history-actions">
+          <small>{{ chat.messageCount }}</small>
+          <button
+            class="delete-chat"
+            type="button"
+            title="Delete chat"
+            aria-label="Delete chat"
+            (click)="deleteChat(chat._id, $event)"
+          >
+            x
+          </button>
+        </span>
+      </button>
+    </div>
+
+    <ng-template #emptyHistory>
+      <p class="empty-history">Your saved chats will appear here.</p>
+    </ng-template>
+  </aside>
+
+  <section class="conversation">
+    <header class="conversation-header">
+      <div>
+        <p>Active session</p>
+        <h2>{{ activeTitle() }}</h2>
+      </div>
+      <div class="header-actions">
+        <div class="tone-toggle" aria-label="Tone">
+          <button
+            type="button"
+            *ngFor="let tone of tones"
+            [class.active]="tone === selectedTone()"
+            (click)="setTone(tone)"
+          >
+            {{ tone }}
+          </button>
+        </div>
+        <span class="status" [class.busy]="isLoading() || isSending()">
+          {{ isLoading() || isSending() ? "Working" : "Ready" }}
+        </span>
+      </div>
+    </header>
+
+    <div class="alert alert-danger" role="alert" *ngIf="error()">
+      {{ error() }}
+    </div>
+
+    <div class="messages" #messageList *ngIf="messages().length; else welcome">
+      <article
+        class="message"
+        *ngFor="let message of messages(); trackBy: trackByMessage"
+        [class.user]="message.role === 'user'"
+        [class.assistant]="message.role === 'assistant'"
+      >
+        <div class="message-avatar" aria-hidden="true">
+          {{ message.role === "user" ? "U" : "AI" }}
+        </div>
+        <div class="message-content">
+          <div class="message-meta">
+            <span>{{ message.role === "user" ? "You" : "Nexus AI" }}</span>
+            <small>{{ message.role === "user" ? "Message" : "Response" }}</small>
+          </div>
+          <div class="message-body">
+            <p>{{ message.content }}</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="message assistant typing" *ngIf="isSending()">
+        <div class="message-avatar" aria-hidden="true">AI</div>
+        <div class="message-content">
+          <div class="message-meta">
+            <span>Nexus AI</span>
+            <small>Typing</small>
+          </div>
+          <div class="message-body">
+            <p><span></span><span></span><span></span></p>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <ng-template #welcome>
+      <div class="welcome">
+        <div class="welcome-orbit">
+          <span>AI</span>
+        </div>
+        <h2>Build sharper ideas with Gemini.</h2>
+        <p>Choose a tone, start a conversation, and keep the result saved in your workspace.</p>
+        <div class="suggestions">
+          <button
+            type="button"
+            *ngFor="let suggestion of promptSuggestions"
+            (click)="useSuggestion(suggestion)"
+          >
+            {{ suggestion }}
+          </button>
+        </div>
+      </div>
+    </ng-template>
+
+    <form class="composer" (ngSubmit)="sendMessage()">
+      <div class="composer-field">
+        <textarea
+          name="message"
+          [(ngModel)]="draft"
+          rows="3"
+          maxlength="3000"
+          placeholder="Ask Nexus AI to draft, explain, debug, plan, or improve something..."
+          [disabled]="isSending()"
+          (keydown)="onComposerKeydown($event)"
+        ></textarea>
+        <small>{{ draft.length }}/3000</small>
+      </div>
+      <button class="btn btn-primary" type="submit" [disabled]="!draft.trim() || isSending()">
+        Send
+        <span aria-hidden="true">-></span>
+      </button>
+    </form>
+  </section>
+</main>

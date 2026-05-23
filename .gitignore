@@ -1,0 +1,95 @@
+# =========================
+# Node Modules
+# =========================
+node_modules/
+
+# =========================
+# Angular
+# =========================
+frontend/dist/
+frontend/.angular/
+frontend/coverage/
+
+# Angular cache
+.angular/
+
+# =========================
+# Express / Backend
+# =========================
+backend/uploads/
+backend/temp/
+backend/logs/
+
+# =========================
+# Environment Variables
+# =========================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# =========================
+# Logs
+# =========================
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+# Runtime Data
+# =========================
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE / Editor
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# Temporary Files
+# =========================
+tmp/
+temp/
+
+# =========================
+# Build Files
+# =========================
+build/
+dist/
+
+# =========================
+# MongoDB
+# =========================
+*.mongodb
+
+# =========================
+# Cache
+# =========================
+.cache/
+.eslintcache
+
+# =========================
+# SSL Certificates
+# =========================
+*.pem
+*.key
+*.crt
+
+# =========================
+# Package Lock (Optional)
+# Keep this if working in team
+# =========================
+# package-lock.json
