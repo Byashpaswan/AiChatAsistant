@@ -4,11 +4,13 @@ import chatRoutes from "./routes/chat.routes.js";
 
 const app = express();
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL || "http://localhost:4200"
-  })
-);
+app.use(cors({
+  origin: [
+    "https://aiasistent1.netlify.app"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 app.use(express.json());
 
 app.get("/api/health", (_req, res) => {
