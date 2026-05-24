@@ -6,7 +6,9 @@ const app = express();
 
 app.use(cors({
   origin: [
-    "https://aiasistent1.netlify.app"
+    "https://aiasistent1.netlify.app",
+    "https://aichatasistant.onrender.com",
+    process.env.CLIENT_URL
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
