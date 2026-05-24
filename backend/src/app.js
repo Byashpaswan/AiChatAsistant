@@ -1,9 +1,12 @@
 import express from "express";
 import cors from "cors";
 import chatRoutes from "./routes/chat.routes.js";
+import logger from "morgan"
 
 const app = express();
 
+
+app.use(logger('dev'))
 app.use(cors({
   origin: [
     "https://aiasistent1.netlify.app",
@@ -31,4 +34,12 @@ app.use((_req, res) => {
   });
 });
 
+app.use((err, req, res, next) => {
+  console.error(err);
+
+  return res.status(500).json({
+    success: false,
+    message: err.message || 'Internal Server Error'
+  });
+});
 export default app;
