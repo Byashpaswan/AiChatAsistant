@@ -9,7 +9,7 @@ import {
 
 @Injectable({ providedIn: "root" })
 export class ChatService {
-  private readonly apiUrl = "https://aichatasistant.onrender.com:5000/api/chat";
+  private readonly apiUrl = "https://aichatasistant.onrender.com/api/chat";
 
   constructor(private readonly http: HttpClient) {}
 
